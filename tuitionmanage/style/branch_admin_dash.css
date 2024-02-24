@@ -1,0 +1,79 @@
+/* styles.css */
+
+/* Center the heading */
+
+h1.text-right {
+    text-align: center;
+}
+
+/* Add padding to the heading */
+h1.mt-4 {
+    padding: 20px;
+}
+
+/* Center the buttons row and add space between buttons */
+.row.buttons {
+    justify-content: center;
+}
+
+.row.buttons .col-md-2 {
+    margin-bottom: 15px;
+}
+
+/* Center the "View Subjects" heading */
+h1.mt-4 {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Center the "View All Students" heading */
+.col-md-6.text-right {
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Add space around the table */
+.table {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.fields{
+    padding-top: 40px;
+}
+/* styles.css */
+
+/* Center the text within the button */
+.btn-square.pt-2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+body{
+    background-color: #fff9c4;
+}
+.h1{
+    padding-top: 30px;
+    padding-left: 25%;
+}
+.header {
+    text-align: center;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+.fields .btn-square {
+    transition: transform 0.3s ease;
+}
+
+.fields .btn-square:hover {
+    transform: translateY(-5px); /* Adjust the value based on your preference */
+}
+

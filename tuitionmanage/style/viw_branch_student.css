@@ -1,0 +1,13 @@
+body{
+    background-color: #fff9c4;
+}
+.mt-4{
+    text-align: center;
+}
+.row{
+    padding-top: 50px;
+}
+.cd:hover .card:hover {
+    background-color: #34dd86; /* Change this to your desired color */
+    color: #e8e8e8; /* Change this to your desired text color */
+}
