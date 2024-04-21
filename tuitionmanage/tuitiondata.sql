@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS branch_students (
     branch_id VARCHAR(4) NOT NULL,
     student_name VARCHAR(100) NOT NULL,
     contact VARCHAR(20) NOT NULL,
+    contact2 VARCHAR(20) NOT NULL,
     address VARCHAR(255) NOT NULL,
     parent_name VARCHAR(100) NOT NULL,
     UNIQUE KEY (branch_id, student_name, parent_name, contact)
@@ -72,13 +73,17 @@ CREATE TABLE IF NOT EXISTS invoices (
 ALTER TABLE invoices
 ADD COLUMN subject_name JSON,
 ADD COLUMN student_name VARCHAR(100),
+ADD COLUMN parent_name VARCHAR(100),
 ADD COLUMN contact_number VARCHAR(20),
 ADD COLUMN address VARCHAR(255),
 ADD COLUMN paid_amount DECIMAL(10, 2) DEFAULT 0,
 ADD COLUMN due_amount DECIMAL(10, 2) DEFAULT 0,
 ADD COLUMN balance_amount DECIMAL(10, 2) DEFAULT 0,
-ADD COLUMN invoice_status ENUM('Paid', 'Due') DEFAULT 'Due';
+ADD COLUMN invoice_status ENUM('Paid', 'Due','Advance paid') DEFAULT 'Due',
+ADD COLUMN time TIME DEFAULT CURRENT_TIME();
 
+ALTER TABLE invoices
+MODIFY COLUMN time TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 -- -- Update the stored procedure to include the correct logic
 -- DROP PROCEDURE IF EXISTS generateInvoiceNumber;
 

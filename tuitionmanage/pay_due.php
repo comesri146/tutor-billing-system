@@ -2,10 +2,26 @@
 include 'admin.php';
 include 'session_helper.php';
 
-// Function to get invoice details by invoice number
-function getInvoiceDetailsByNumber($conn, $invoiceNumber) {
-    $invoiceNumber = mysqli_real_escape_string($conn, $invoiceNumber);
-    $result = $conn->query("SELECT * FROM invoices WHERE invoice_number = '$invoiceNumber'");
+
+// Function to get student ID based on contact number and student name
+function getStudentId($conn, $contactNumber, $studentName) {
+    $result = $conn->query("SELECT id FROM branch_students WHERE (contact = '$contactNumber' or contact2 ='$contactNumber')AND student_name = '$studentName'");
+
+    if ($result === false) {
+        die('Error in query: ' . $conn->error);
+    }
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['id'];
+    }
+
+    return null;
+}
+
+// Function to get invoice details by contact number and student name
+function getInvoiceDetails($conn, $contactNumber, $studentName) {
+    $result = $conn->query("SELECT * FROM invoices WHERE contact_number = '$contactNumber' AND student_name = '$studentName'");
 
     if ($result === false) {
         die('Error in query: ' . $conn->error);
@@ -50,23 +66,30 @@ function generateNewInvoiceNumber($conn, $branchId, $invoiceDate) {
 }
 
 if (isset($_POST['payDue'])) {
-    $invoiceNumber = mysqli_real_escape_string($conn, $_POST['invoiceNumber']);
+    $contactNumber = mysqli_real_escape_string($conn, $_POST['contactNumber']);
+    $studentName = mysqli_real_escape_string($conn, $_POST['studentName']);
     $actualAmount = mysqli_real_escape_string($conn, $_POST['actualAmount']);
 
     // Get invoice details
-    $invoiceDetails = getInvoiceDetailsByNumber($conn, $invoiceNumber);
+    $invoiceDetails = getInvoiceDetails($conn, $contactNumber, $studentName);
+
+      // Get student ID based on contact number and student name
+      $studentId = getStudentId($conn, $contactNumber, $studentName);
 
     if ($invoiceDetails) {
         $dueAmount = $invoiceDetails['due_amount'];
-        
-        // Check if actual amount is greater than due amount
+        $grandtotal = $invoiceDetails['grand_total'];
+        $parentname = $invoiceDetails['parent_name'];
+        $address = $invoiceDetails['address'];
+        $subjectNamesJson = $invoiceDetails['subject_name'];
+        // Calculate new due amount, balance amount, and status
         if ($actualAmount >= $dueAmount) {
+            $newDueAmount = 0;
             $balanceAmount = $actualAmount - $dueAmount;
-            $newDueAmount = 0; // Set due amount to 0 if paid in full
             $status = 'Paid';
         } else {
-            $balanceAmount = 0;
             $newDueAmount = $dueAmount - $actualAmount;
+            $balanceAmount = 0;
             $status = 'Due';
         }
 
@@ -77,16 +100,17 @@ if (isset($_POST['payDue'])) {
         // Generate a new invoice number
         $newInvoiceNumber = generateNewInvoiceNumber($conn, $branchId, $invoiceDate);
 
-        // Update invoices table with new due amount, balance amount, and status
-        $updateQuery = "UPDATE invoices SET invoice_date = ?, invoice_number = ?, due_amount = ?, balance_amount = ?, invoice_status = ? WHERE invoice_number = ?";
-        $stmt = $conn->prepare($updateQuery);
+        // Insert new invoice details
+        $insertQuery = "INSERT INTO invoices (invoice_number, branch_id, student_id, student_name, contact_number, parent_name, address, subject_name, paid_amount, due_amount, balance_amount, grand_total, invoice_status, invoice_date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TIME(CURRENT_TIMESTAMP))";
+        $stmt = $conn->prepare($insertQuery);
 
         if (!$stmt) {
             die('Error in prepare statement: ' . $conn->error);
         }
 
-        $stmt->bind_param("ssddss", $invoiceDate, $newInvoiceNumber, $newDueAmount, $balanceAmount, $status, $invoiceNumber);
 
+        $stmt->bind_param("sssssssssssdss", $newInvoiceNumber, $branchId, $studentId, $studentName, $contactNumber, $parentname, $address, $subjectNamesJson, $actualAmount, $newDueAmount, $balanceAmount, $grandtotal, $status, $invoiceDate);
+        
         if (!$stmt->execute()) {
             die('Error in execute statement: ' . $stmt->error);
         }

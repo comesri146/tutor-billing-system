@@ -11,15 +11,4 @@ if (!isset($_SESSION['branch_id'])) {
     exit();
 }
 
-
-if (isset($_POST['addStudent'])) {
-    $branchID = $_SESSION['branch_id'];
-    $studentName = $_POST['studentName'];
-    $contact = $_POST['contact'];
-    $address = $_POST['address'];
-    $parentName = $_POST['parentName'];
-
-    // Add the branchID as the first parameter
-    addStudent($conn, $branchID, $studentName, $contact, $address, $parentName);
-}
 ?>

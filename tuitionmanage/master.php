@@ -103,11 +103,7 @@ function addSubject($conn, $subjectName, $fees, $tax, $selectedBranches) {
 
 
 
-// Create Branch
-function createBranch($conn, $branchName) {
-    $sql = "INSERT INTO branches (branch_name) VALUES ('$branchName')";
-    $conn->query($sql);
-}
+
 
 // Get Branches for Master
 function getMasterBranches($conn) {
@@ -152,13 +148,13 @@ function getMasterDashboardData($conn) {
 
 
 // Handle Create Branch Form Submission
-if (isset($_POST['createBranch'])) {
-    $branchName = $_POST['branchName'];
+// if (isset($_POST['createBranch'])) {
+//     $branchName = $_POST['branchName'];
 
-    createBranch($conn, $branchName);
-    header("Location: master_dashboard.php");
-    exit();
-}
+//     createBranch($conn, $branchName);
+//     header("Location: master_dashboard.php");
+//     exit();
+// }
 
 
 // Function to get all students from all branches

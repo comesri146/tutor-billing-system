@@ -46,7 +46,22 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Student Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css"> <!-- Add your custom styles if needed -->
+    <link rel="stylesheet" href="./style/view_student_details.css"> <!-- Add your custom styles if needed -->
+    <style>
+         #but{
+            position: fixed;
+            top: 3rem;
+            right:4rem;
+         }
+         #tbl{
+            margin-bottom:4rem;
+         }
+         .scrollable {
+            height: 80vh; /* Adjust the height as needed */
+            overflow-y: auto;
+         }
+
+        </style>
 </head>
 <body style="height: 100%; overflow: hidden;">
 
@@ -54,14 +69,13 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
 
 
 <div class="row">
-        <div class="col-md-6">
-            <a href="master_dashboard.php" class="btn btn-primary">Master Dashboard</a>
-        </div>
-        <div class="col-md-6 text-right">
-            <h1 class="mb-4">View All Students</h1>
+        
+        <div class="col-md-6 mx-auto text-center">
+            <h1 class="mb-6">View All Students</h1>
         </div>
     </div>
-
+    <div class="scrollable"> <!-- Add scrollable class here -->
+            <a href="master_dashboard.php" class="btn btn-primary" id="but">Master Dashboard</a>
     <!-- All Students Table -->
     <table class="table table-bordered">
         <thead>
@@ -92,6 +106,7 @@ if (isset($_GET['delete']) && isset($_GET['id'])) {
             <?php endforeach; ?>
         </tbody>
     </table>
+            </div>
 </div>
 
 <!-- Edit Student Modal -->

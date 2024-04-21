@@ -2,10 +2,23 @@
 // Include your master.php file for database connection and functions
 include 'master.php';
 
-// Assuming you have functions to get subjects, delete subject, and update subject
-// Replace these with your actual functions
-function getSubjects($conn) {
+// Fetch subjects with or without search condition
+if (isset($_POST['search'])) {
+    $searchValue = $_POST['search'];
+    $subjects = searchSubjects($conn, $searchValue);
+} else {
+    $subjects = searchSubjects($conn);
+}
+
+function searchSubjects($conn, $search = null) {
     $query = "SELECT * FROM subjects";
+
+    // Add a search condition if a search value is provided
+    if ($search !== null) {
+        $search = $conn->real_escape_string($search);
+        $query .= " WHERE subject_name LIKE '%$search%' OR fees LIKE '%$search%' OR tax LIKE '%$search%' OR branch_id LIKE '%$search%'";
+    }
+
     $result = $conn->query($query);
 
     // Fetch subjects into an array
@@ -16,6 +29,26 @@ function getSubjects($conn) {
 
     return $subjects;
 }
+
+
+
+
+
+
+// Assuming you have functions to get subjects, delete subject, and update subject
+// Replace these with your actual functions
+// function getSubjects($conn) {
+//     $query = "SELECT * FROM subjects";
+//     $result = $conn->query($query);
+
+//     // Fetch subjects into an array
+//     $subjects = [];
+//     while ($row = $result->fetch_assoc()) {
+//         $subjects[] = $row;
+//     }
+
+//     return $subjects;
+// }
 
 function deleteSubject($conn, $subjectId) {
     $subjectId = $conn->real_escape_string($subjectId); // Sanitize input
@@ -33,7 +66,9 @@ function updateSubject($conn, $subjectId, $newSubjectData) {
 }
 
 // Fetch subjects
-$subjects = getSubjects($conn);
+// $subjects = getSubjects($conn);
+
+
 
 // Handle delete request
 if (isset($_GET['delete']) && isset($_GET['subject_id'])) {
@@ -72,17 +107,108 @@ if (isset($_POST['update_subject'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Subjects</title>
-    <link rel="stylesheet" href="styles.css">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style/view_subject.css"> <!-- Add your custom styles if needed -->
+    <style>
+body {
+            background-image: url('./assests/white.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: top center;
+            height: auto;
+            width: auto;
+            overflow: hidden;
+            margin: 0; /* Remove default body margin */
+            padding: 0; /* Remove default body padding */
+        }
+
+        .custom-padding {
+            padding-left: 28%; /* Adjust the value according to your preference */
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 1rem;
+            background-color: rgba(254, 254, 254, 0.64);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-glass {
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-right: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-glass:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+
+#editSubjectModal {
+    height: 100vh;
+    margin-right:180rem;
+    margin-left:-35rem;
+    
+}
+
+.modal-dialog {
+    max-width: 30%;
+}
+
+#view{
+    margin-bottom: 3rem;
+    color: red;
+}
+#dash{
+    position: fixed;
+    top:2rem;
+    right: 3rem;
+}
+        </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-4">View Subjects</h1>
-
+    <h1 class="mt-4 custom-padding" id="view">Subject Details</h1>
+      <!-- Add search bar -->
+      <form method="post" class="form-inline mb-3">
+            <div class="form-group">
+                <input type="text" class="form-control" id="search" name="search" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Search</button>
+            <button type="button" class="btn btn-secondary ml-2" onclick="resetSearch()">Reset</button>
+        </form>
+        <a href="master_dashboard.php" class="btn btn-primary mt-4" id ="dash">Back to Master Dashboard</a>
         <table class="table mt-4">
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Branch_Id</th>
                     <th>Subject Name</th>
                     <th>Fees</th>
                     <th>Tax</th>
@@ -93,6 +219,7 @@ if (isset($_POST['update_subject'])) {
                 <?php foreach ($subjects as $subject) : ?>
                     <tr>
                         <td><?php echo $subject['id']; ?></td>
+                        <td><?php echo $subject['branch_id']; ?></td>
                         <td><?php echo $subject['subject_name']; ?></td>
                         <td><?php echo $subject['fees']; ?></td>
                         <td><?php echo $subject['tax']; ?></td>
@@ -109,33 +236,43 @@ if (isset($_POST['update_subject'])) {
         <!-- Add any additional content or features as needed -->
 
         <!-- Optional: Add a button to go back to the Master Dashboard -->
-        <a href="master_dashboard.php" class="btn btn-primary mt-4">Back to Master Dashboard</a>
+      
 
         <!-- Edit Subject Modal -->
        <!-- Edit Subject Modal -->
 <!-- Edit Subject Modal -->
 <div id="editSubjectModal" class="modal">
-    <div class="modal-content edit-modal">
-        <span class="close" onclick="toggleEditFormVisibility()">&times;</span>
-        <form action="view_subject.php" method="post">
-            <div class="form-group">
-                <label for="updated_subject_name">Subject Name:</label>
-                <input type="text" class="form-control" name="updated_subject_name" required>
+    <div class="modal-dialog">
+        <div class="modal-content edit-modal small-modal">
+            <div class="modal-header text-center">
+                <span class="close" onclick="toggleEditFormVisibility()">&times;</span>
             </div>
-            <div class="form-group">
-                <label for="updated_fees">Fees:</label>
-                <input type="number" class="form-control" name="updated_fees" required>
-            </div>
-            <div class="form-group">
-                <label for="updated_tax">Tax:</label>
-                <input type="number" class="form-control" name="updated_tax" required>
-            </div>
+            <div class="modal-body">
+                <form action="view_subject.php" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="updated_subject_name">Subject Name:</label>
+                            <input type="text" class="form-control" name="updated_subject_name" required>
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="updated_fees">Fees:</label>
+                            <input type="number" class="form-control" name="updated_fees" required>
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="updated_tax">Tax:</label>
+                            <input type="number" class="form-control" name="updated_tax" required>
+                        </div>
+                    </div>
 
-            <input type="hidden" name="subject_id" value="">
-            <button type="submit" class="btn btn-primary" name="update_subject">Update Subject</button>
-        </form>
+                    <input type="hidden" name="subject_id" value="">
+                    <button type="submit" class="btn btn-primary" name="update_subject">Update Subject</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
+
 
 <script>
     function toggleEditFormVisibility(subjectId, subjectName, fees, tax) {
@@ -160,5 +297,13 @@ if (isset($_POST['update_subject'])) {
             modal.style.display = "none";
         }
     }
+
+    function resetSearch() {
+            // Reset the search input value to empty
+            document.getElementById('search').value = '';
+
+            // Submit the form to show all details
+            document.querySelector('form').submit();
+        }
 </script>
 
