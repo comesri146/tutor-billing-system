@@ -19,6 +19,9 @@ After successfull login you will see this page :
 ![image](https://github.com/user-attachments/assets/899d58cc-007f-472e-91dc-8491df1c7f8b)
 
 
+## Download and add dompdf  from below link in project:
+
+[Dompdf download]( https://github.com/dompdf/dompdf/releases)
 ## Project work flow:
 
   - Login as master/ admin for tuition billing system  with lgoin credentials below:
