@@ -24,7 +24,7 @@ After successfull login you will see this page :
   - Login as master/ admin for tuition billing system  with lgoin credentials below:
        username: master1
        password: master123
-     if you need to add more admin add in tuitiondata.sql file.
+     if you need to add more admin add in **tuitiondata.sql** file.
   - After succesfully logged as admin/master  you will redirect to admin /master dashboard shown below.
     
        ![image](https://github.com/user-attachments/assets/c14a74b6-944c-461b-b71b-bc9ade5aa736)
