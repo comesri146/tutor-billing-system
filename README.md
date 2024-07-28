@@ -36,6 +36,11 @@ After successfull login you will see this page :
 
   ### In above page click the PhpMyAdmin and you need to login into database with below provided
 
+      username: id21968246_sriram
+      Password: Tuitionbilling@1
+
+      
+
 
 
 
