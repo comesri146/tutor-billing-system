@@ -19,6 +19,26 @@ After successfull login you will see this page :
 ![image](https://github.com/user-attachments/assets/899d58cc-007f-472e-91dc-8491df1c7f8b)
 
 
+**Add new master follow the step**
+
+  ![image](https://github.com/user-attachments/assets/6e796438-b51a-4052-9b15-837fbaa1be63)
+
+  click manage button in above window image.
+
+  ![image](https://github.com/user-attachments/assets/acfe13d5-4378-4b72-9091-2bd55bec4418)
+  
+
+  ### scroll down the page  you will see the Databases section   under that click the MySQL Databases  you will redirect to below page:
+  
+
+  ![image](https://github.com/user-attachments/assets/43780b6e-19dd-4bf7-937e-d4ae941a581f)
+
+
+  ### In above page click the PhpMyAdmin and you need to login into database with below provided
+
+
+
+
 ## Download and add dompdf  from below link in project:
 
 [Dompdf download]( https://github.com/dompdf/dompdf/releases)
