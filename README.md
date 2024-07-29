@@ -43,6 +43,26 @@ After successfull login you will see this page :
   ![image](https://github.com/user-attachments/assets/81128eed-ecf4-4a7f-9808-3195f5e454b1)
 
 
+**click the MASTER table in id21968246_tuitionbilling database.**
+
+![image](https://github.com/user-attachments/assets/164756fa-d004-4591-8d30-e7cb2e53b4b6)
+
+
+**Click the INSERT button in top  of the page to add new master**
+
+![image](https://github.com/user-attachments/assets/9731d750-188e-4634-b582-aea2248952a5)
+
+**Add the new master by adding  username and passowrd  choose function as MD5 for encryption of password you entered   and clcik Go**
+
+![image](https://github.com/user-attachments/assets/b9c2ef76-f844-4d0b-b307-c3e3415247da)
+
+**Again Do not  click the go button at bottom of the page  if you click it then it make duplicate of the username and password . so go to master table after above step**
+
+![image](https://github.com/user-attachments/assets/36c52c27-dc53-45d5-a079-405ce34ada2b)
+
+**You can see the added new master username and password**
+
+![image](https://github.com/user-attachments/assets/133a38f5-3661-4daa-9850-2d6a0060a30b)
 
 
 ## Download and add dompdf  from below link in project:
